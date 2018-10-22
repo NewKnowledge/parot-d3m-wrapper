@@ -1,1 +1,2 @@
-# arima-d3m-wrapper
+# parot-d3m-wrapper
+Predict with ARIMA on time series

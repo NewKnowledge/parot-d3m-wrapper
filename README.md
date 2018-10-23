@@ -1,2 +1,2 @@
-# parrot-d3m-wrapper
-Predictive AutoRegressive Results over time
+# parot-d3m-wrapper
+Parot - Predict with ARIMA on time series - D3M Wrapper

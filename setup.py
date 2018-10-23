@@ -2,7 +2,7 @@ from distutils.core import setup
 
 setup(name='ParrotD3MWrapper',
     version='1.0.0',
-    description='A thin wrapper for interacting with New Knowledge time series prediction tool Parot',
+    description='A thin wrapper for interacting with New Knowledge time series prediction tool Parrot',
     packages=['ParrotsD3MWrapper'],
     install_requires=["typing",
         "Parot==1.0.0"],

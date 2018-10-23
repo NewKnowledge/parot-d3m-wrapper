@@ -1,9 +1,9 @@
 from distutils.core import setup
 
-setup(name='ParotD3MWrapper',
+setup(name='ParrotD3MWrapper',
     version='1.0.0',
-    description='A thin wrapper for interacting with New Knowledge time series prediction tool Parot',
-    packages=['ParotsD3MWrapper'],
+    description='A thin wrapper for interacting with New Knowledge time series prediction tool Parrot',
+    packages=['ParrotsD3MWrapper'],
     install_requires=["typing",
         "Parot==1.0.0"],
     dependency_links=[
@@ -12,7 +12,7 @@ setup(name='ParotD3MWrapper',
     ],
     entry_points = {
         'd3m.primitives': [
-            'distil.Parot = ParotD3MWrapper:Parot'
+            'distil.Parrot = ParrotD3MWrapper:Parrot'
         ],
     },
 )

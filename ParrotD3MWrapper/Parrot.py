@@ -107,7 +107,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         n_periods = self.hyperparams['n_periods']
         seasonal = self.hyperparams['seasonal']
 
-        future_forecast = sloth.PredictSeriesArima(inputs, n_periods, seasonal)
+        future_forecast = sloth.PredictSeriesARIMA(inputs, n_periods, seasonal)
         return CallResult(future_forecast)
 
 

@@ -8,7 +8,7 @@ setup(name='ParrotD3MWrapper',
         "Parrot==1.0.0"],
     dependency_links=[
         # must change 
-        "git+https://github.com/NewKnowledge/parrot-d3m-wrapper@236044f795948a74f214f391094d2e625bd0032f#egg=Parrot-1.0.0"
+        "git+https://github.com/NewKnowledge/parrot-d3m-wrapper@abff3b4c6281791ef0fa7319372ae16cc2e198b0#egg=Parrot-1.0.0"
     ],
     entry_points = {
         'd3m.primitives': [

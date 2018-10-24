@@ -27,7 +27,7 @@ class Hyperparams(hyperparams.Hyperparams):
        'https://metadata.datadrivendiscovery.org/types/TuningParameter'])
     seasonal = hyperparams.UniformBool(default = True, semantic_types = [
        'https://metadata.datadrivendiscovery.org/types/ControlParameter'],
-       description="seasonal ARIMA prediction"])
+       description="seasonal ARIMA prediction")
     pass
 
 class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):

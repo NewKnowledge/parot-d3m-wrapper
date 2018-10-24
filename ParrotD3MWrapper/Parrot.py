@@ -93,7 +93,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
         Parameters
         ----------
-        inputs : Input pandas frame where first column contains dates and second column contains values
+        inputs : pandas data frame containing training data where first column contains dates and second column contains values
 
         Returns
         ----------
@@ -113,6 +113,8 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
 if __name__ == '__main__':
     client = Parrot(hyperparams={'n_periods':18, 'seasonal':True})
-    frame = pandas.read_csv("Electronic_Production.csv",index_col=0)
-    result = client.produce(inputs = frame)
+    data = pandas.read_csv("Electronic_Production.csv",index_col=0)
+    # select training data from csv
+    train = data.loc['1985-01-01':'2016-12-01']
+    result = client.produce(inputs = train)
     print(result)

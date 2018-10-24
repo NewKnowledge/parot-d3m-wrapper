@@ -27,23 +27,22 @@ class Hyperparams(hyperparams.Hyperparams):
        'https://metadata.datadrivendiscovery.org/types/TuningParameter'])
     seasonal = hyperparams.UniformBool(default = True, semantic_types = [
        'https://metadata.datadrivendiscovery.org/types/ControlParameter'],
-       description="seasonal ARIMA prediction",
-   ))
+       description="seasonal ARIMA prediction"])
     pass
 
-class Parot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
+class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     metadata = metadata_base.PrimitiveMetadata({
         # Simply an UUID generated once and fixed forever. Generated using "uuid.uuid4()".
         'id': "77bf4b92-2faa-3e38-bb7e-804131243a7f",
         'version': __version__,
-        'name': "Sloth",
+        'name': "Parrot",
         # Keywords do not have a controlled vocabulary. Authors can put here whatever they find suitable.
         'keywords': ['Time Series','Clustering'],
         'source': {
             'name': __author__,
             'uris': [
                 # Unstructured URIs.
-                "https://github.com/NewKnowledge/sloth-d3m-wrapper",
+                "https://github.com/NewKnowledge/parrot-d3m-wrapper",
             ],
         },
         # A list of dependencies in order. These can be Python packages, system packages, or Docker images.
@@ -56,12 +55,12 @@ class Parot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
             'version': '0.28.5',
         },{
             'type': metadata_base.PrimitiveInstallationType.PIP,
-            'package_uri': 'git+https://github.com/NewKnowledge/sloth-d3m-wrapper.git@{git_commit}#egg=SlothD3MWrapper'.format(
+            'package_uri': 'git+https://github.com/NewKnowledge/parrot-d3m-wrapper.git@{git_commit}#egg=ParrotD3MWrapper'.format(
                 git_commit=utils.current_git_commit(os.path.dirname(__file__)),
             ),
         }],
         # The same path the primitive is registered with entry points in setup.py.
-        'python_path': 'd3m.primitives.distil.Sloth.cluster',
+        'python_path': 'd3m.primitives.distil.Parrot',
         # Choose these from a controlled vocabulary in the schema. If anything is missing which would
         # best describe the primitive, make a merge request.
         'algorithm_types': [

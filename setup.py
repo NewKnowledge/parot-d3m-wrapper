@@ -7,7 +7,7 @@ setup(name='ParrotD3MWrapper',
     install_requires=["typing",
         "Sloth>=2.0.1"],
     dependency_links=[
-        "git+https://github.com/NewKnowledge/sloth@jg/editArima#egg=Sloth-2.0.0"
+        "git+https://github.com/NewKnowledge/sloth@d48df2844b31f0e08e296b9ba795eab7d8e487fb#egg=Sloth-2.0.1"
     ],
     entry_points = {
         'd3m.primitives': [

@@ -35,7 +35,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # Simply an UUID generated once and fixed forever. Generated using "uuid.uuid4()".
         'id': "77bf4b92-2faa-3e38-bb7e-804131243a7f",
         'version': __version__,
-        'name': "Parrot",
+        'name': "parrot",
         # Keywords do not have a controlled vocabulary. Authors can put here whatever they find suitable.
         'keywords': ['Time Series','Clustering'],
         'source': {

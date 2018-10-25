@@ -33,11 +33,11 @@ class Hyperparams(hyperparams.Hyperparams):
 class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     metadata = metadata_base.PrimitiveMetadata({
         # Simply an UUID generated once and fixed forever. Generated using "uuid.uuid4()".
-        'id': "77bf4b92-2faa-3e38-bb7e-804131243a7f",
+        'id': "d473d487-2c32-49b2-98b5-a2b48571e07c",
         'version': __version__,
         'name': "parrot",
         # Keywords do not have a controlled vocabulary. Authors can put here whatever they find suitable.
-        'keywords': ['Time Series','Clustering'],
+        'keywords': ['Time Series'],
         'source': {
             'name': __author__,
             'uris': [
@@ -64,9 +64,9 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # Choose these from a controlled vocabulary in the schema. If anything is missing which would
         # best describe the primitive, make a merge request.
         'algorithm_types': [
-            metadata_base.PrimitiveAlgorithmType.SPECTRAL_CLUSTERING,
+            metadata_base.PrimitiveAlgorithmType.AUTOREGRESSIVE_INTEGRATED_MOVING_AVERAGE,
         ],
-        'primitive_family': metadata_base.PrimitiveFamily.TIME_SERIES_SEGMENTATION,
+        'primitive_family': metadata_base.PrimitiveFamily.TIME_SERIES_FORECASTING,
     })
 
     def __init__(self, *, hyperparams: Hyperparams, random_seed: int = 0)-> None:

@@ -108,13 +108,14 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         seasonal = self.hyperparams['seasonal']
 
         future_forecast = sloth.PredictSeriesARIMA(inputs, n_periods, seasonal)
+        print(future_forecast)
         return CallResult(future_forecast)
 
 
 if __name__ == '__main__':
-    client = Parrot(hyperparams={'n_periods':18, 'seasonal':True})
-    data = pandas.read_csv("Electronic_Production.csv",index_col=0)
+    client = Parrot(hyperparams={'n_periods':4, 'seasonal':True})
+    data = pandas.read_csv("abbv.2013.csv",index_col=0)
     # select training data from csv
-    train = data.loc['1985-01-01':'2016-12-01']
+    train = data.loc['2013-01-04':'2013-10-21']
     result = client.produce(inputs = train)
     print(result)

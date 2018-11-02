@@ -1,13 +1,13 @@
 from distutils.core import setup
 
 setup(name='ParrotD3MWrapper',
-    version='1.0.0',
+    version='1.0.1',
     description='A thin wrapper for interacting with New Knowledge time series prediction tool Parrot',
     packages=['ParrotD3MWrapper'],
     install_requires=["typing",
-        "Sloth>=2.0.1"],
+        "Sloth>=2.0.2"],
     dependency_links=[
-        "git+https://github.com/NewKnowledge/sloth@0524f75a5e72e7db6001ed25eca35a20a46c9d18#egg=Sloth-2.0.1"
+        "git+https://github.com/NewKnowledge/sloth@5ce7132480cdbc7565f9f6c1086f8d10371e94f0#egg=Sloth-2.0.2"
     ],
     entry_points = {
         'd3m.primitives': [

@@ -28,6 +28,9 @@ class Hyperparams(hyperparams.Hyperparams):
     seasonal = hyperparams.UniformBool(default = True, semantic_types = [
        'https://metadata.datadrivendiscovery.org/types/ControlParameter'],
        description="seasonal ARIMA prediction")
+    seasonal_differencing = hyperparams.UniformInt(lower = 1, upper = 365, default = 12, 
+        semantic_types=['https://metadata.datadrivendiscovery.org/types/TuningParameter'], 
+        description='period of seasonal differencing')
     pass
 
 class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
@@ -106,14 +109,15 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # set number of periods and seasonal flag for ARIMA
         n_periods = self.hyperparams['n_periods']
         seasonal = self.hyperparams['seasonal']
+        seasonal_differencing = self.hyperparams['seasonal_differencing']
 
-        future_forecast = sloth.PredictSeriesARIMA(inputs, n_periods, seasonal)
+        future_forecast = sloth.PredictSeriesARIMA(inputs, n_periods, seasonal, seasonal_differencing)
         print(future_forecast)
         return CallResult(future_forecast)
 
 
 if __name__ == '__main__':
-    client = Parrot(hyperparams={'n_periods':18, 'seasonal':True})
+    client = Parrot(hyperparams={'n_periods':18, 'seasonal':True, 'seasonal_differencing':12})
     data = pandas.read_csv("Electronic_Production.csv",index_col=0)
     # select training data from csv
     train = data.loc['1985-01-01':'2016-12-01']

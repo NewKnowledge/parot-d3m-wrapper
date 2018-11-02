@@ -1,17 +1,17 @@
-# parrot-d3m-wrapper
+# Parrot D3M Wrapper
 Parrot - Predictive AutoRegressive Results On Time
 
 This library is a wrapper of Sloth's ARIMA time series prediction function into the D3M infrastructure. Code is written in Python 3.6 and must be run in Python 3.6 or greater. 
 
-Input
+## Input
 
 The input is a pandas data frame that contains training data in two columns. The first column contains time series indices (preferably in datetime format) and the second column contains time series values. 
 
-Output 
+## Output 
 
 The output is a list of length 'n_periods' that contains a prediction for each of 'n_periods' future time periods. 'n_periods' is a hyperparameter that must be set before making the prediction.
 
-Available Functions
+## Available Functions
 
-produce
+#### produce
 Produce the primitive's prediction for future time series data. The input is a pandas data frame, with characteristics described above. The output is a list of length 'n_periods'.

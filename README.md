@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # Shallot D3M Wrapper
 Shallot - SHApeLet Learning Over Time-series
 
@@ -28,3 +29,7 @@ The output is a list of length 'n_periods' that contains a prediction for each o
 #### produce
 Produce the primitive's prediction for future time series data. The input is a pandas data frame, with characteristics described above. The output is a list of length 'n_periods'.
 >>>>>>> 7e0f21d74e6c0c09576a7704756285c69922c928
+=======
+# parrot-d3m-wrapper
+Parrot - Predictive AutoRegressive Results on Time
+>>>>>>> parent of 9faaf32... version 1.0.0 of shallot d3m wrapper

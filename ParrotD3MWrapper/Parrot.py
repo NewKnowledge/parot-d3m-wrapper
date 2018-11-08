@@ -74,8 +74,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
     def __init__(self, *, hyperparams: Hyperparams, random_seed: int = 0)-> None:
         super().__init__(hyperparams=hyperparams, random_seed=random_seed)
-
-        self._decoder = JSONDecoder()
+        
         self._params = {}
 
     def fit(self) -> None:

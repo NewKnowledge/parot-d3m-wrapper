@@ -84,6 +84,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
         # fits ARIMA model using training data from set_training_data and hyperparameters
         sloth = Sloth()
+        print(self.hyperparams['seasonal_differencing'])
         self._ARIMA = sloth.FitSeriesARIMA(self._X_train, 
                                                 self.hyperparams['seasonal'], 
                                                 self.hyperparams['seasonal_differencing'])

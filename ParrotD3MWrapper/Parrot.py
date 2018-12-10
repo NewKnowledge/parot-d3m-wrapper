@@ -103,7 +103,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         inputs : pandas data frame containing training data where first column contains dates and second column contains values
         
         """
-        self.X_train = inputs
+        self._X_train = inputs
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
         """

@@ -75,7 +75,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         super().__init__(hyperparams=hyperparams, random_seed=random_seed)
         self._params = {}
         self._X_train = None        # training inputs
-        self._ARIMA = None          # ARIMA classifier
+        self._arima = None          # ARIMA classifier
 
     def fit(self) -> None:
         """
@@ -85,7 +85,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # fits ARIMA model using training data from set_training_data and hyperparameters
         sloth = Sloth()
         print(self.hyperparams['seasonal_differencing'])
-        self._ARIMA = sloth.FitSeriesARIMA(self._X_train, 
+        self._arima = sloth.FitSeriesARIMA(self._X_train, 
                                                 self.hyperparams['seasonal'], 
                                                 self.hyperparams['seasonal_differencing'])
 
@@ -120,7 +120,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
             The output is a list containing a forecast for each of the 'n_periods' future time periods
         """
 
-        future_forecast = sloth.PredictSeriesARIMA(self._ARIMA, self.hyperparams['n_periods'])
+        future_forecast = sloth.PredictSeriesARIMA(self._arima, self.hyperparams['n_periods'])
         print(future_forecast)
         return CallResult(future_forecast)
 

@@ -3,7 +3,6 @@ import os.path
 import numpy as np
 import pandas
 import typing
-from json import JSONDecoder
 from typing import List
 
 from Sloth import Sloth
@@ -75,11 +74,20 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
     def __init__(self, *, hyperparams: Hyperparams, random_seed: int = 0)-> None:
         super().__init__(hyperparams=hyperparams, random_seed=random_seed)
 
-        self._decoder = JSONDecoder()
         self._params = {}
+        self._X_train = None        # training inputs
+        self._ARIMA = None          # ARIMA classifier
 
     def fit(self) -> None:
-        pass
+        """
+        Fits ARIMA model using training data from set_training_data and hyperparameters
+        """
+
+        # fits ARIMA model using training data from set_training_data and hyperparameters
+        sloth = Sloth()
+        self._ARIMA = sloth.FitSeriesARIMA(self._X_train, 
+                                                self.hyperparams['seasonal'], 
+                                                self.hyperparams['seasonal_differencing'])
 
     def get_params(self) -> Params:
         return self._params
@@ -88,7 +96,15 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         self.params = params
 
     def set_training_data(self, *, inputs: Inputs, outputs: Outputs) -> None:
-        pass
+        """
+        Set primitive's training data
+
+        Parameters
+        ----------
+        inputs : pandas data frame containing training data where first column contains dates and second column contains values
+        
+        """
+        self.X_train = inputs
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
         """
@@ -96,30 +112,24 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
         Parameters
         ----------
-        inputs : pandas data frame containing training data where first column contains dates and second column contains values
+        None
 
         Returns
         ----------
         Outputs
             The output is a list containing a forecast for each of the 'n_periods' future time periods
         """
-        # set model up
-        sloth = Sloth()
 
-        # set number of periods and seasonal flag for ARIMA
-        n_periods = self.hyperparams['n_periods']
-        seasonal = self.hyperparams['seasonal']
-        seasonal_differencing = self.hyperparams['seasonal_differencing']
-
-        future_forecast = sloth.PredictSeriesARIMA(inputs, n_periods, seasonal, seasonal_differencing)
+        future_forecast = sloth.PredictSeriesARIMA(self._ARIMA, self.hyperparams['n_periods'])
         print(future_forecast)
         return CallResult(future_forecast)
-
 
 if __name__ == '__main__':
     client = Parrot(hyperparams={'n_periods':18, 'seasonal':True, 'seasonal_differencing':12})
     data = pandas.read_csv("Electronic_Production.csv",index_col=0)
     # select training data from csv
     train = data.loc['1985-01-01':'2016-12-01']
-    result = client.produce(inputs = train)
-    print(result)
+    client.set_training_data(inputs = train, outputs = None)
+    client.fit()
+    results = client.produce()
+    print(results)

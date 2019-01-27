@@ -14,6 +14,7 @@ from d3m.metadata import hyperparams, base as metadata_base, params
 
 __author__ = 'Distil'
 __version__ = '1.0.2'
+__contact__ = 'mailto:jeffrey.gleason@newknowledge.io'
 
 Inputs = container.pandas.DataFrame
 Outputs = container.List
@@ -42,6 +43,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         'keywords': ['Time Series'],
         'source': {
             'name': __author__,
+            'contact': __contact__,
             'uris': [
                 # Unstructured URIs.
                 "https://github.com/NewKnowledge/parrot-d3m-wrapper",
@@ -62,7 +64,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
             ),
         }],
         # The same path the primitive is registered with entry points in setup.py.
-        'python_path': 'd3m.primitives.distil.parrot',
+        'python_path': 'd3m.primitives.time_series_forecasting.arima.Parrot',
         # Choose these from a controlled vocabulary in the schema. If anything is missing which would
         # best describe the primitive, make a merge request.
         'algorithm_types': [

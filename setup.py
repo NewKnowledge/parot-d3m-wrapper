@@ -11,7 +11,7 @@ setup(name='ParrotD3MWrapper',
     ],
     entry_points = {
         'd3m.primitives': [
-            'distil.parrot = ParrotD3MWrapper:Parrot'
+            'time_series_forecasting.arima.Parrot = ParrotD3MWrapper:Parrot'
         ],
     },
 )

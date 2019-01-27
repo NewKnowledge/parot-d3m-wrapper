@@ -34,6 +34,11 @@ class Hyperparams(hyperparams.Hyperparams):
     pass
 
 class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
+    '''
+    Produce the primitive's prediction for future time series data. The output 
+    is a list of length 'n_periods' that contains a prediction for each of 'n_periods' 
+    future time periods. 'n_periods' is a hyperparameter that must be set before making the prediction.
+    '''
     metadata = metadata_base.PrimitiveMetadata({
         # Simply an UUID generated once and fixed forever. Generated using "uuid.uuid4()".
         'id': "d473d487-2c32-49b2-98b5-a2b48571e07c",

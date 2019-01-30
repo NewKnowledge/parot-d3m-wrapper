@@ -1,3 +1,0 @@
-[d3m.primitives]
-time_series_forecasting.arima.Parrot = ParrotD3MWrapper:Parrot
-

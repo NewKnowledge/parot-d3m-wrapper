@@ -10,21 +10,26 @@ from Sloth import Sloth
 from d3m.primitive_interfaces.base import PrimitiveBase, CallResult
 
 from d3m import container, utils
+from d3m.container import DataFrame as d3m_DataFrame
 from d3m.metadata import hyperparams, base as metadata_base, params
+from common_primitives import utils as utils_cp, dataset_to_dataframe as DatasetToDataFrame
 
 __author__ = 'Distil'
-__version__ = '1.0.2'
+__version__ = '1.0.3'
 __contact__ = 'mailto:jeffrey.gleason@newknowledge.io'
 
 Inputs = container.pandas.DataFrame
-Outputs = container.List
+Outputs = container.pandas.DataFrame
 
 class Params(params.Params):
     pass
 
+# default values chosen for 56_sunspots 'sunspot.year' seed dataset
 class Hyperparams(hyperparams.Hyperparams):
-    n_periods = hyperparams.UniformInt(lower = 1, upper = sys.maxsize, default = 18, semantic_types=[
-       'https://metadata.datadrivendiscovery.org/types/TuningParameter'])
+    index = hyperparams.UniformInt(lower = 0, upper = sys.maxsize, default = 2, semantic_types=[
+       'https://metadata.datadrivendiscovery.org/types/ControlParameter'])
+    n_periods = hyperparams.UniformInt(lower = 1, upper = sys.maxsize, default = 29, semantic_types=[
+       'https://metadata.datadrivendiscovery.org/types/ControlParameter'])
     seasonal = hyperparams.UniformBool(default = True, semantic_types = [
        'https://metadata.datadrivendiscovery.org/types/ControlParameter'],
        description="seasonal ARIMA prediction")
@@ -85,7 +90,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         self._arima = None          # ARIMA classifier
         self._sloth = Sloth()        # Sloth library 
 
-    def fit(self) -> None:
+    def fit(self, *, timeout: float = None, iterations: int = None) -> CallResult[None]:
         """
         Fits ARIMA model using training data from set_training_data and hyperparameters
         """
@@ -94,11 +99,10 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         self._arima = self._sloth.FitSeriesARIMA(self._X_train, 
                                                 self.hyperparams['seasonal'],
                                                 self.hyperparams['seasonal_differencing'])
-
     def get_params(self) -> Params:
         return self._params
 
-    def set_params(self, *, params: Params) -> None:
+    def set_params(self, *, params:Params) -> None:
         self.params = params
 
     def set_training_data(self, *, inputs: Inputs, outputs: Outputs) -> None:
@@ -110,7 +114,9 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         inputs : pandas data frame containing training data where first column contains dates and second column contains values
         
         """
-        self._X_train = inputs
+
+        # use column according to hyperparameter index
+        self._X_train = inputs.iloc[:,self.hyperparams['index']].values
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
         """
@@ -123,19 +129,45 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         Returns
         ----------
         Outputs
-            The output is a list containing a forecast for each of the 'n_periods' future time periods
+            The output is a data frame containing the d3m index and a forecast for each of the 'n_periods' future time periods
         """
 
+        # add metadata to output
+        # just take d3m index from input test set
+        output_df = inputs[['d3mIndex']]
+        # produce future foecast using arima
         future_forecast = self._sloth.PredictSeriesARIMA(self._arima, self.hyperparams['n_periods'])
-        print(future_forecast)
-        return CallResult(future_forecast)
+        with open('debug.txt','a') as file:
+            file.write("DEBUG")
+            file.write(output_df.shape[0])
+            file.write(len(future_forecast))
+        output_df['predictions'] = future_forecast
+        parrot_df = d3m_DataFrame(output_df)
+        # first column ('d3mIndex')
+        col_dict = dict(parrot_df.metadata.query((metadata_base.ALL_ELEMENTS, 0)))
+        col_dict['structural_type'] = type("1")
+        col_dict['name'] = 'd3mIndex'
+        col_dict['semantic_types'] = ('http://schema.org/Integer', 'https://metadata.datadrivendiscovery.org/types/PrimaryKey',)
+        parrot_df.metadata = parrot_df.metadata.update((metadata_base.ALL_ELEMENTS, 0), col_dict)
+        # second column ('predictions')
+        col_dict = dict(parrot_df.metadata.query((metadata_base.ALL_ELEMENTS, 1)))
+        col_dict['structural_type'] = type("1")
+        col_dict['name'] = 'predictions'
+        col_dict['semantic_types'] = ('http://schema.org/Integer', 'https://metadata.datadrivendiscovery.org/types/Attribute',)
+        parrot_df.metadata = parrot_df.metadata.update((metadata_base.ALL_ELEMENTS, 1), col_dict)
+
+        return CallResult(parrot_df)
 
 if __name__ == '__main__':
-    client = Parrot(hyperparams={'n_periods':18, 'seasonal':True, 'seasonal_differencing':12})
-    data = pandas.read_csv("Electronic_Production.csv",index_col=0)
-    # select training data from csv
-    train = data.loc['1985-01-01':'2016-12-01']
-    client.set_training_data(inputs = train, outputs = None)
+
+    # load data and preprocessing
+    input_dataset = container.Dataset.load('file:///data/home/jgleason/D3m/datasets/seed_datasets_current/56_sunspots/TRAIN/dataset_TRAIN/datasetDoc.json')
+    ds2df_client = DatasetToDataFrame.DatasetToDataFramePrimitive(hyperparams={"dataframe_resource":"learningData"})
+    df = d3m_DataFrame(ds2df_client.produce(inputs = input_dataset).value)
+    client = Parrot(hyperparams={'index':2, 'n_periods':29, 'seasonal':True, 'seasonal_differencing':11})
+    client.set_training_data(inputs = df, outputs = None)
     client.fit()
-    results = client.produce()
-    print(results)
+    test_dataset = container.Dataset.load('file:///data/home/jgleason/D3m/datasets/seed_datasets_current/56_sunspots/TEST/dataset_TEST/datasetDoc.json')
+    test_df = d3m_DataFrame(ds2df_client.produce(inputs = test_dataset).value)
+    results = client.produce(inputs = test_df)
+    print(results.value)

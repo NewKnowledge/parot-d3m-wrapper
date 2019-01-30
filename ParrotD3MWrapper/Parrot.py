@@ -139,8 +139,8 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         future_forecast = self._sloth.PredictSeriesARIMA(self._arima, self.hyperparams['n_periods'])
         with open('debug.txt','a') as file:
             file.write("DEBUG")
-            file.write(output_df.shape[0])
-            file.write(len(future_forecast))
+            file.write(str(output_df.shape[0]))
+            file.write(str(len(future_forecast)))
         output_df['predictions'] = future_forecast
         parrot_df = d3m_DataFrame(output_df)
         # first column ('d3mIndex')

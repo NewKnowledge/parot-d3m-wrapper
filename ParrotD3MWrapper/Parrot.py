@@ -134,27 +134,24 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
         # add metadata to output
         # just take d3m index from input test set
-        output_df = inputs[['d3mIndex']]
         # produce future foecast using arima
-        future_forecast = self._sloth.PredictSeriesARIMA(self._arima, self.hyperparams['n_periods'])
-        with open('debug.txt','a') as file:
-            file.write("DEBUG")
-            file.write(str(output_df.shape[0]))
-            file.write(str(len(future_forecast)))
-        output_df['predictions'] = future_forecast
-        parrot_df = d3m_DataFrame(output_df)
+        future_forecast = pandas.DataFrame(self._sloth.PredictSeriesARIMA(self._arima, self.hyperparams['n_periods']))
+        future_forecast.columns = ['predictions']
+        parrot_df = d3m_DataFrame(future_forecast)
+        '''
         # first column ('d3mIndex')
         col_dict = dict(parrot_df.metadata.query((metadata_base.ALL_ELEMENTS, 0)))
         col_dict['structural_type'] = type("1")
         col_dict['name'] = 'd3mIndex'
         col_dict['semantic_types'] = ('http://schema.org/Integer', 'https://metadata.datadrivendiscovery.org/types/PrimaryKey',)
         parrot_df.metadata = parrot_df.metadata.update((metadata_base.ALL_ELEMENTS, 0), col_dict)
+        '''
         # second column ('predictions')
-        col_dict = dict(parrot_df.metadata.query((metadata_base.ALL_ELEMENTS, 1)))
+        col_dict = dict(parrot_df.metadata.query((metadata_base.ALL_ELEMENTS, 0)))
         col_dict['structural_type'] = type("1")
         col_dict['name'] = 'predictions'
         col_dict['semantic_types'] = ('http://schema.org/Integer', 'https://metadata.datadrivendiscovery.org/types/Attribute',)
-        parrot_df.metadata = parrot_df.metadata.update((metadata_base.ALL_ELEMENTS, 1), col_dict)
+        parrot_df.metadata = parrot_df.metadata.update((metadata_base.ALL_ELEMENTS, 0), col_dict)
 
         return CallResult(parrot_df)
 

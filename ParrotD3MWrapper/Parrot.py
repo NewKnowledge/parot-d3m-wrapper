@@ -136,10 +136,12 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
 
         # add metadata to output
         # just take d3m index from input test set
+        output_df = inputs['d3mIndex']
         # produce future foecast using arima
         future_forecast = pandas.DataFrame(self._sloth.PredictSeriesARIMA(self._arima, self.hyperparams['n_periods']))
         future_forecast.columns = ['predictions']
-        parrot_df = d3m_DataFrame(future_forecast)
+        output_df = pandas.concat([output_df, future_forecast])
+        parrot_df = d3m_DataFrame(output_df)
         '''
         # first column ('d3mIndex')
         col_dict = dict(parrot_df.metadata.query((metadata_base.ALL_ELEMENTS, 0)))

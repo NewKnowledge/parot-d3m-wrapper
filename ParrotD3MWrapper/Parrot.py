@@ -90,7 +90,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         self._arima = None          # ARIMA classifier
         self._sloth = Sloth()        # Sloth library 
 
-    def fit(self, *, timeout: float = None, iterations: int = None) -> CallResult[None]:
+    def fit(self, *, timeout: float = None, iterations: int = None) -> None:
         """
         Fits ARIMA model using training data from set_training_data and hyperparameters
         """

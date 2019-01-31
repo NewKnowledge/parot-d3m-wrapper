@@ -151,11 +151,11 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         col_dict['semantic_types'] = ('http://schema.org/Integer', 'https://metadata.datadrivendiscovery.org/types/PrimaryKey',)
         parrot_df.metadata = parrot_df.metadata.update((metadata_base.ALL_ELEMENTS, 0), col_dict)
         # second column ('predictions')
-        col_dict = dict(parrot_df.metadata.query((metadata_base.ALL_ELEMENTS, 0)))
+        col_dict = dict(parrot_df.metadata.query((metadata_base.ALL_ELEMENTS, 1)))
         col_dict['structural_type'] = type("1")
         col_dict['name'] = 'predictions'
         col_dict['semantic_types'] = ('http://schema.org/Integer', 'https://metadata.datadrivendiscovery.org/types/Attribute',)
-        parrot_df.metadata = parrot_df.metadata.update((metadata_base.ALL_ELEMENTS, 0), col_dict)
+        parrot_df.metadata = parrot_df.metadata.update((metadata_base.ALL_ELEMENTS, 1), col_dict)
 
         return CallResult(parrot_df)
 

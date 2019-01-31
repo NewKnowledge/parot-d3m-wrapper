@@ -99,6 +99,8 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         self._arima = self._sloth.FitSeriesARIMA(self._X_train, 
                                                 self.hyperparams['seasonal'],
                                                 self.hyperparams['seasonal_differencing'])
+        return CallResult(None)
+        
     def get_params(self) -> Params:
         return self._params
 

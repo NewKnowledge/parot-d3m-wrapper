@@ -140,8 +140,6 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # produce future foecast using arima
         future_forecast = pandas.DataFrame(self._sloth.PredictSeriesARIMA(self._arima, self.hyperparams['n_periods']))
         output_df = pandas.concat([output_df, future_forecast], axis=1)
-        list_inputs = list(inputs)
-        output_df.columns = [list_inputs[0], list_inputs[self.hyperparams['index']]]
         parrot_df = d3m_DataFrame(output_df)
         
         # first column ('d3mIndex')
@@ -153,7 +151,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # second column ('predictions')
         col_dict = dict(parrot_df.metadata.query((metadata_base.ALL_ELEMENTS, 1)))
         col_dict['structural_type'] = type("1")
-        col_dict['name'] = 'predictions'
+        col_dict['name'] = list(inputs)self.hyperparams['index']
         col_dict['semantic_types'] = ('http://schema.org/Integer', 'https://metadata.datadrivendiscovery.org/types/Attribute',)
         parrot_df.metadata = parrot_df.metadata.update((metadata_base.ALL_ELEMENTS, 1), col_dict)
 

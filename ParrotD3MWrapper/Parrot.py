@@ -118,7 +118,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         """
 
         # use column according to hyperparameter index
-        self._X_train = inputs.iloc[:,self.hyperparams['index']].values
+        self._X_train = inputs.iloc[:,self.hyperparams['index']].values.astype(np.float)
 
     def produce(self, *, inputs: Inputs, timeout: float = None, iterations: int = None) -> CallResult[Outputs]:
         """

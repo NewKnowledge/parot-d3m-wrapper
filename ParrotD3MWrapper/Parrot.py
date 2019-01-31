@@ -90,12 +90,14 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         self._arima = None          # ARIMA classifier
         self._sloth = Sloth()        # Sloth library 
 
-    def fit(self, *, timeout: float = None, iterations: int = None) -> None:
+    def fit(self, *, timeout: float = None, iterations: int = None) -> CallResult[None]:
         """
         Fits ARIMA model using training data from set_training_data and hyperparameters
         """
 
         # fits ARIMA model using training data from set_training_data and hyperparameters
+        with open('debug.txt', 'a') as file:
+            file.write(str(self._X_train))
         self._arima = self._sloth.FitSeriesARIMA(self._X_train, 
                                                 self.hyperparams['seasonal'],
                                                 self.hyperparams['seasonal_differencing'])
@@ -154,10 +156,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         col_dict['name'] = 'predictions'
         col_dict['semantic_types'] = ('http://schema.org/Integer', 'https://metadata.datadrivendiscovery.org/types/Attribute',)
         parrot_df.metadata = parrot_df.metadata.update((metadata_base.ALL_ELEMENTS, 0), col_dict)
-        
-        with open('debug.txt', 'a') as file:
-            file.write(str(parrot_df))
-        
+
         return CallResult(parrot_df)
 
 if __name__ == '__main__':

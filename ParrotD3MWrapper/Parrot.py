@@ -96,8 +96,6 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         """
 
         # fits ARIMA model using training data from set_training_data and hyperparameters
-        with open('debug.txt', 'a') as file:
-            file.write(str(self._X_train))
         self._arima = self._sloth.FitSeriesARIMA(self._X_train, 
                                                 self.hyperparams['seasonal'],
                                                 self.hyperparams['seasonal_differencing'])
@@ -139,8 +137,6 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # produce future foecast using arima
         future_forecast = pandas.DataFrame(self._sloth.PredictSeriesARIMA(self._arima, self.hyperparams['n_periods']))
         future_forecast.columns = ['predictions']
-        with open('debug.txt', 'a') as file:
-            file.write(str(future_forecast['predictions']))
         parrot_df = d3m_DataFrame(future_forecast)
         '''
         # first column ('d3mIndex')

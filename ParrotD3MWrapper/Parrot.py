@@ -154,7 +154,10 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         col_dict['name'] = 'predictions'
         col_dict['semantic_types'] = ('http://schema.org/Integer', 'https://metadata.datadrivendiscovery.org/types/Attribute',)
         parrot_df.metadata = parrot_df.metadata.update((metadata_base.ALL_ELEMENTS, 0), col_dict)
-
+        
+        with open('debug.txt', 'a') as file:
+            file.write(str(parrot_df))
+        
         return CallResult(parrot_df)
 
 if __name__ == '__main__':

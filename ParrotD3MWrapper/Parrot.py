@@ -70,10 +70,6 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
                 'version': '0.28.5',
              },
              {
-                "type": "PIP",
-                "package_uri": "git+https://github.com/NewKnowledge/sloth.git@9ebb3ed2282e54979fda431068a8732bf76f06a1#egg=Sloth"
-             },
-             {
             'type': metadata_base.PrimitiveInstallationType.PIP,
             'package_uri': 'git+https://github.com/NewKnowledge/parrot-d3m-wrapper.git@{git_commit}#egg=ParrotD3MWrapper'.format(
                 git_commit=utils.current_git_commit(os.path.dirname(__file__)),

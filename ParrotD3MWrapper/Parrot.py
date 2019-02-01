@@ -63,15 +63,21 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # Of course Python packages can also have their own dependencies, but sometimes it is necessary to
         # install a Python package first to be even able to run setup.py of another package. Or you have
         # a dependency which is not on PyPi.
-         'installation': [{
-             'type': metadata_base.PrimitiveInstallationType.PIP,
-            'package': 'cython',
-            'version': '0.28.5',
-        },{
+         'installation': [
+             {
+                'type': metadata_base.PrimitiveInstallationType.PIP,
+                'package': 'cython',
+                'version': '0.28.5',
+             },
+             {
+                "type": "PIP",
+                "package_uri": "git+https://github.com/NewKnowledge/sloth.git@jg/editDeps#egg=Sloth"
+             },
+             {
             'type': metadata_base.PrimitiveInstallationType.PIP,
             'package_uri': 'git+https://github.com/NewKnowledge/parrot-d3m-wrapper.git@{git_commit}#egg=ParrotD3MWrapper'.format(
                 git_commit=utils.current_git_commit(os.path.dirname(__file__)),
-            ),
+             ),
         }],
         # The same path the primitive is registered with entry points in setup.py.
         'python_path': 'd3m.primitives.time_series_forecasting.arima.Parrot',

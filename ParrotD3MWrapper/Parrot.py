@@ -71,7 +71,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
              },
              {
                 "type": "PIP",
-                "package_uri": "git+https://github.com/NewKnowledge/sloth.git@jg/editDeps#egg=Sloth"
+                "package_uri": "git+https://github.com/NewKnowledge/sloth.git@9ebb3ed2282e54979fda431068a8732bf76f06a1#egg=Sloth"
              },
              {
             'type': metadata_base.PrimitiveInstallationType.PIP,

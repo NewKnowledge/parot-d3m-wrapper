@@ -27,9 +27,9 @@ class Params(params.Params):
 # default values chosen for 56_sunspots 'sunspot.year' seed dataset
 class Hyperparams(hyperparams.Hyperparams):
     index = hyperparams.UniformInt(lower = 0, upper = sys.maxsize, default = 2, semantic_types=[
-       'https://metadata.datadrivendiscovery.org/types/ControlParameter'])
+       'https://metadata.datadrivendiscovery.org/types/ControlParameter'], description='index of column to predict')
     n_periods = hyperparams.UniformInt(lower = 1, upper = sys.maxsize, default = 29, semantic_types=[
-       'https://metadata.datadrivendiscovery.org/types/ControlParameter'])
+       'https://metadata.datadrivendiscovery.org/types/ControlParameter'], description='number of periods to predict')
     seasonal = hyperparams.UniformBool(default = True, semantic_types = [
        'https://metadata.datadrivendiscovery.org/types/ControlParameter'],
        description="seasonal ARIMA prediction")
@@ -163,9 +163,9 @@ if __name__ == '__main__':
 
     # load data and preprocessing
     input_dataset = container.Dataset.load('file:///data/home/jgleason/D3m/datasets/seed_datasets_current/56_sunspots/TRAIN/dataset_TRAIN/datasetDoc.json')
-    ds2df_client = DatasetToDataFrame.DatasetToDataFramePrimitive(hyperparams={"dataframe_resource":"learningData"})
+    ds2df_client = DatasetToDataFrame.DatasetToDataFramePrimitive(hyperparams = hyperparams_class.defaults().replace({"dataframe_resource":"learningData"}))
     df = d3m_DataFrame(ds2df_client.produce(inputs = input_dataset).value)
-    client = Parrot(hyperparams={'index':2, 'n_periods':29, 'seasonal':True, 'seasonal_differencing':11})
+    client = Parrot(hyperparams=hyperparams_class.defaults().replace({'index':2, 'n_periods':29, 'seasonal':True, 'seasonal_differencing':11}))
     client.set_training_data(inputs = df, outputs = None)
     client.fit()
     test_dataset = container.Dataset.load('file:///data/home/jgleason/D3m/datasets/seed_datasets_current/56_sunspots/TEST/dataset_TEST/datasetDoc.json')

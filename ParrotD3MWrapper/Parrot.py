@@ -90,7 +90,6 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         self._params = {}
         self._X_train = None        # training inputs
         self._arima = None          # ARIMA classifier
-        self._sloth = Sloth()        # Sloth library 
 
     def fit(self, *, timeout: float = None, iterations: int = None) -> CallResult[None]:
         """
@@ -98,7 +97,8 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         """
 
         # fits ARIMA model using training data from set_training_data and hyperparameters
-        self._arima = self._sloth.FitSeriesARIMA(self._X_train, 
+        Sloth = Sloth()
+        self._arima = Sloth.FitSeriesARIMA(self._X_train, 
                                                 self.hyperparams['seasonal'],
                                                 self.hyperparams['seasonal_differencing'])
         return CallResult(None)
@@ -140,7 +140,8 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # just take d3m index from input test set
         output_df = inputs['d3mIndex']
         # produce future foecast using arima
-        future_forecast = pandas.DataFrame(self._sloth.PredictSeriesARIMA(self._arima, self.hyperparams['n_periods']))
+        Sloth = Sloth()
+        future_forecast = pandas.DataFrame(Sloth.PredictSeriesARIMA(self._arima, self.hyperparams['n_periods']))
         output_df = pandas.concat([output_df, future_forecast], axis=1)
         parrot_df = d3m_DataFrame(output_df)
         
@@ -163,8 +164,10 @@ if __name__ == '__main__':
 
     # load data and preprocessing
     input_dataset = container.Dataset.load('file:///data/home/jgleason/D3m/datasets/seed_datasets_current/56_sunspots/TRAIN/dataset_TRAIN/datasetDoc.json')
+    hyperparams_class = DatasetToDataFrame.DatasetToDataFramePrimitive.metadata.query()['primitive_code']['class_type_arguments']['Hyperparams']
     ds2df_client = DatasetToDataFrame.DatasetToDataFramePrimitive(hyperparams = hyperparams_class.defaults().replace({"dataframe_resource":"learningData"}))
     df = d3m_DataFrame(ds2df_client.produce(inputs = input_dataset).value)
+    hyperparams_class = Parrot.metadata.query()['primitive_code']['class_type_arguments']['Hyperparams']
     client = Parrot(hyperparams=hyperparams_class.defaults().replace({'index':2, 'n_periods':29, 'seasonal':True, 'seasonal_differencing':11}))
     client.set_training_data(inputs = df, outputs = None)
     client.fit()

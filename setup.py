@@ -5,9 +5,9 @@ setup(name='ParrotD3MWrapper',
     description='A thin wrapper for interacting with New Knowledge time series prediction tool Parrot',
     packages=['ParrotD3MWrapper'],
     install_requires=["typing",
-        "Sloth==2.0.2"],
+        "Sloth==2.0.3"],
     dependency_links=[
-        "git+https://github.com/NewKnowledge/sloth@82a1e08049531270256f38ca838e6cc7d1119223#egg=Sloth-2.0.2"
+        "git+https://github.com/NewKnowledge/sloth@82a1e08049531270256f38ca838e6cc7d1119223#egg=Sloth-2.0.3"
     ],
     entry_points = {
         'd3m.primitives': [

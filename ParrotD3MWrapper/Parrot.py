@@ -89,6 +89,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         super().__init__(hyperparams=hyperparams, random_seed=random_seed)
         self._params = {}
         self._X_train = None        # training inputs
+        self._sloth = Sloth()       # Sloth model
         self._arima = None          # ARIMA classifier
 
     def fit(self, *, timeout: float = None, iterations: int = None) -> CallResult[None]:
@@ -97,8 +98,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         """
 
         # fits ARIMA model using training data from set_training_data and hyperparameters
-        Sloth = Sloth()
-        self._arima = Sloth.FitSeriesARIMA(self._X_train, 
+        self._arima = self._sloth.FitSeriesARIMA(self._X_train, 
                                                 self.hyperparams['seasonal'],
                                                 self.hyperparams['seasonal_differencing'])
         return CallResult(None)
@@ -140,8 +140,7 @@ class Parrot(PrimitiveBase[Inputs, Outputs, Params, Hyperparams]):
         # just take d3m index from input test set
         output_df = inputs['d3mIndex']
         # produce future foecast using arima
-        Sloth = Sloth()
-        future_forecast = pandas.DataFrame(Sloth.PredictSeriesARIMA(self._arima, self.hyperparams['n_periods']))
+        future_forecast = pandas.DataFrame(self._sloth.PredictSeriesARIMA(self._arima, self.hyperparams['n_periods']))
         output_df = pandas.concat([output_df, future_forecast], axis=1)
         parrot_df = d3m_DataFrame(output_df)
         
